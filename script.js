@@ -61,10 +61,24 @@ function displayPokemons() {
         return; // sort de la fonction
     }
 
+    /*
     let resultatHTML = ''; // CREE resultatHTML, pour n'appeler qu'une fois innerHTML (gourmand en énergie)
     for (let pokemon of pokemonTab) {
-        resultatHTML += `<p>${pokemon.name} <small>${pokemon.type}</small></p>`;
+        let pokemonType = pokemon.type.split(',');
+        resultatHTML += `<p>${pokemon.name} <small>${pokemonType}</small></p>`;
     }
+     */
+    let resultatHTML = ''; // CREE resultatHTML, pour n'appeler qu'une fois innerHTML (gourmand en énergie)
+    for (let pokemon of pokemonTab) {
+        let pokemonType = pokemon.type.split(',');
+
+        if(pokemonType.length === 1){
+            resultatHTML += `<p>${pokemon.name} <small>${pokemonType[0]}</small></p>`;
+        } else if (pokemonType.length === 2){
+            resultatHTML += `<p>${pokemon.name} <small>${pokemonType[0]}</small> <small>${pokemonType[1]}</small></p>`
+        }
+    }
+
     containerDiv.innerHTML = resultatHTML;
 }
 displayPokemons();
