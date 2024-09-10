@@ -45,8 +45,22 @@ const pokemonTab = [
     { name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png' },
     { name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png' },
     { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
-    { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
+    { }
 ];
+
+/*
+ * Fonction qui retourne le code HTML de la carte du pokémon passé en paramètre
+ * @param { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
+ */
+function generatePokemonCardHTML(pokemon) {
+    return `<div class="pokemon-card" style="background: #705898;">
+                <img src="images/${pokemon.img}" alt="${pokemon.name}"/>
+                <h2>${pokemon.name}</h2>
+                <div>Type: ${pokmon.type.replace(',',' / ')}</div>
+                <div>Niveau: ${pokemon.level}</div>
+            </div>`;
+}
+    
 
 const containerDiv = document.querySelector('.pokemon-container');
 
@@ -61,14 +75,13 @@ function displayPokemons() {
         return; // sort de la fonction
     }
 
-    /*
+    
     let resultatHTML = ''; // CREE resultatHTML, pour n'appeler qu'une fois innerHTML (gourmand en énergie)
     for (let pokemon of pokemonTab) {
-        let pokemonType = pokemon.type.split(',');
-        resultatHTML += `<p>${pokemon.name} <small>${pokemonType}</small></p>`;
+        resultatHTML += generatePokemonCardHTML(pokemon);
     }
-     */
-    let resultatHTML = ''; // CREE resultatHTML, pour n'appeler qu'une fois innerHTML (gourmand en énergie)
+    containerDiv.innerHTML = resultatHTML;
+    /*
     for (let pokemon of pokemonTab) {
         let pokemonType = pokemon.type.split(',');
 
@@ -78,7 +91,9 @@ function displayPokemons() {
             resultatHTML += `<p>${pokemon.name} <small>${pokemonType[0]}</small> <small>${pokemonType[1]}</small></p>`
         }
     }
+    */
 
-    containerDiv.innerHTML = resultatHTML;
+
+
 }
 displayPokemons();
