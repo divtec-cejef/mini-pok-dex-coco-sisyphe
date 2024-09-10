@@ -28,7 +28,7 @@ const typeColors = {
 };
 
 // Tableau d'objets représentant les Pokémon
-const pokemons = [
+const pokemonTab = [
     { name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png' },
     { name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png' },
     { name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png' },
@@ -47,3 +47,24 @@ const pokemons = [
     { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
     { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
+
+const containerDiv = document.querySelector('.pokemon-container');
+
+// Fonction pour AFFICHER le nom des Pokemons dans le div
+function displayPokemons() {
+
+    containerDiv.innerHTML = ''; // EFFACE les données actuelles du div container-pokemon
+
+    // à faire dans la condition: SI longueur du tableau est égale à 0 (différent de autre)
+    if(!pokemonTab.length) { // if(pokemonTab.length === 0) --> === de valeur 0, de valeur numérique 0 et de type null
+        containerDiv.innerHTML += "<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>";
+        return; // sort de la fonction
+    }
+
+    let resultatHTML = ''; // CREE resultatHTML, pour n'appeler qu'une fois innerHTML (gourmand en énergie)
+    for (let pokemon of pokemonTab) {
+        resultatHTML += `<p>${pokemon.name} <small>${pokemon.type}</small></p>`;
+    }
+    containerDiv.innerHTML = resultatHTML;
+}
+displayPokemons();
