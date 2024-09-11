@@ -53,10 +53,14 @@ const pokemonsTab = [
  * @param pokemon { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' } un objet Pokémon
  */
 
-// Constantes : searchBar = barre de recherches HTML, divContainer = liste contenant Pokemons HTML
+// barreRecherche = barre de recherches HTML
+// divContainer = liste contenant Pokemons HTML
+// filtreType = quel type doit être affiché
+// listeOrdre = quel ordre est choisi
 const divContainer = document.querySelector('.pokemon-container');
-const searchBar = document.getElementById('search-bar');
+const barreRecherche = document.getElementById('search-bar');
 const filtreType = document.getElementById('type-filter');
+const listeOrdre = document.getElementById('sort-order');
 
 // Déclaration de la fonction qui génère une carte pokemon
 function generatePokemonCardHTML(pokemon){
@@ -86,6 +90,7 @@ function generatePokemonCardHTML(pokemon){
 
 /*
  * Fonction qui affiche le nom des pokémons dans la <div class="pokemon-container">
+ * @param = tableau Pokemons
  */
 function displayPokemons(pokemonsTab) {
 
@@ -106,26 +111,55 @@ function displayPokemons(pokemonsTab) {
 }
 
 /*
- * Fonction qui filtre les Pokemons en fonction de la recherche de l'utilisateur (n'affiche que les résultats contenant les mêmes caractères que la recherche)
+ * Fonction qui filtre les Pokemons en fonction de la recherche de l'utilisateur
+ * (affiche que les résultats contenant la même chaîne de caractères que la recherche)
+ * des filtres sélectionnés dans les menus déroulants,
+ * (affiche uniquement si l'option sélectionnée est la même qu'un type de Pokemon)
+ * et par ordre défini (croissant, alphabétique)
  */
-
 function filtrerEtTrierPokemons() {
     divContainer.innerHTML = '';
 
     // crée une constante qui garde la valeur (en minuscules) entrée dans la barre de recerches
-    const recherche = searchBar.value.toLowerCase();
+    const recherche = barreRecherche.value.toLowerCase();
     const typeChoisi = filtreType.value;
-    // crée une variable qui compare la recherche et, dans le tableau pokemonsTab, les noms de Pokemons (mis en minuscule) --> laisse passer seulement le (ou les) pokemon correspondant à la recherche
+    const ordreChoisi = listeOrdre.value;
+
+    // crée une variable qui compare la recherche avec les noms de Pokemons (mis en minuscule) dans le tableau pokemonsTab --> laisse passer seulement le (ou les) pokemon si correspondants
     let pokemonsFiltres = pokemonsTab.filter(pokemon => pokemon.name.toLowerCase().includes(recherche));
+    // modification de la variable pokemonFiltres: filtrer le résultat déjà trié
+    // si le type choisi est "rien" (et ne correspond à aucun type Pokemon), ne rien faire
+    // si le type choisi dans le menu est égal à un des types de pokemons, filtrer les résultats pour n'afficher que ceux-ci
     pokemonsFiltres = pokemonsFiltres.filter(pokemon => typeChoisi === "" || pokemon.type.includes(typeChoisi));
-    console.log(pokemonsFiltres);
+
+    if(ordreChoisi === `name-asc`) {
+        pokemonsFiltres.sort((a, b) => a.name.localeCompare(b.name)); // trier la variable par ordre alphabétique
+                                                                                            // (nom de a comparé à nom de b, trier a et b par ordre alphabétique)
+    } else if(ordreChoisi === `name-desc`) {
+        pokemonsFiltres.sort((a, b) => b.name.localeCompare(a.name)); // trier la variable par ordre inverse alphabétique
+                                                                                            // (nom de a comparé à nom de b, trier a et b par ordre inverse alphabétique)
+    } else if(ordreChoisi === `level-asc`) {
+        pokemonsFiltres.sort((a, b) => a.level - b.level); // trier la variable par ordre croissant
+                                                                                // (int de pokemon.level de a comparé à int de pokemon.level de b, trier a et b par ordre croissant)
+    } else if(ordreChoisi === `level-desc`) {
+        pokemonsFiltres.sort((a, b) => b.level - a.level); // trier la variable par ordre décroissant
+                                                                                // (int de pokemon.level de a comparé à int de pokemon.level de b, trier a et b par ordre décroissant)
+    } else {
+        pokemonsFiltres;
+    }
+
     displayPokemons(pokemonsFiltres);
 }
-/*
- * Fonction qui écoute l'évènement "entrée de texte", et qui applique filtrer... si évènement survient
- */
-searchBar.addEventListener('input', filtrerEtTrierPokemons);
-filtreType.addEventListener('change', filtrerEtTrierPokemons);
 
-// Appelle la fonction displayPokemons()
+/*
+ * Fonctions qui écoute les évènement
+ * Si "entrée de texte" dans "barre de recherche", applique filtrer... quand évènement survient
+ * Si "changement de choix" dans "filtre de types", applique filtrer... quand évènement survient
+ * Si "changement de choix" dans "liste d'ordre", applique filtrer... quand évènement survient
+ */
+barreRecherche.addEventListener('input', filtrerEtTrierPokemons);
+filtreType.addEventListener('change', filtrerEtTrierPokemons);
+listeOrdre.addEventListener('change', filtrerEtTrierPokemons);
+
+// Appelle la fonction filtrerEtTrierPokemons
 filtrerEtTrierPokemons();
