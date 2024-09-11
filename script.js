@@ -54,12 +54,13 @@ const pokemonsTab = [
  */
 
 // Constantes : searchBar = barre de recherches HTML, divContainer = liste contenant Pokemons HTML
-const searchBar = document.getElementById('search-bar');
 const divContainer = document.querySelector('.pokemon-container');
+const searchBar = document.getElementById('search-bar');
+const filtreType = document.getElementById('type-filter');
 
 // Déclaration de la fonction qui génère une carte pokemon
 function generatePokemonCardHTML(pokemon){
-    const imgPath = `images/${img}`
+    const imgPath = `images/${pokemon.img}`;
     // Sort les types de la forme tableau d'objets pour les transformer en liste de chaînes de caractère (séparés par une virgule)
     let tabType = pokemon.type.split(',');
     let type1 = tabType[0]; // 1er type est en position 0
@@ -86,7 +87,7 @@ function generatePokemonCardHTML(pokemon){
 /*
  * Fonction qui affiche le nom des pokémons dans la <div class="pokemon-container">
  */
-function displayPokemons () {
+function displayPokemons(pokemonsTab) {
 
     // Vide le contenu du container
     divContainer.innerHTML = '';
@@ -109,16 +110,22 @@ function displayPokemons () {
  */
 
 function filtrerEtTrierPokemons() {
+    divContainer.innerHTML = '';
+
     // crée une constante qui garde la valeur (en minuscules) entrée dans la barre de recerches
     const recherche = searchBar.value.toLowerCase();
+    const typeChoisi = filtreType.value;
     // crée une variable qui compare la recherche et, dans le tableau pokemonsTab, les noms de Pokemons (mis en minuscule) --> laisse passer seulement le (ou les) pokemon correspondant à la recherche
     let pokemonsFiltres = pokemonsTab.filter(pokemon => pokemon.name.toLowerCase().includes(recherche));
+    pokemonsFiltres = pokemonsFiltres.filter(pokemon => typeChoisi === "" || pokemon.type.includes(typeChoisi));
+    console.log(pokemonsFiltres);
     displayPokemons(pokemonsFiltres);
 }
 /*
  * Fonction qui écoute l'évènement "entrée de texte", et qui applique filtrer... si évènement survient
  */
 searchBar.addEventListener('input', filtrerEtTrierPokemons);
+filtreType.addEventListener('change', filtrerEtTrierPokemons);
 
 // Appelle la fonction displayPokemons()
 filtrerEtTrierPokemons();
