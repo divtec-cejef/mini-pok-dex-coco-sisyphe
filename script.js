@@ -7,7 +7,7 @@
 'use strict';
 
 // Couleur par défaut pour les types de Pokémon non définis
-const DEFAULT_COLOR = '#ccc';
+const DEFAULT_COLOR = 'red';
 
 // Couleurs pour chaque type de Pokémon
 const typeColors = {
@@ -27,8 +27,8 @@ const typeColors = {
     'Psy': '#F85888'
 };
 
-// Tableau d'objets représentant les Pokémon
-const pokemonTab = [
+// Tableau d'objets représentant les Pokémons
+const pokemonsTab = [
     { name: 'Pikachu', type: 'Électrique', level: 35, img: 'pikachu.png' },
     { name: 'Bulbizarre', type: 'Plante,Poison', level: 15, img: 'bulbizarre.png' },
     { name: 'Salamèche', type: 'Feu', level: 20, img: 'salameche.png' },
@@ -38,62 +38,87 @@ const pokemonTab = [
     { name: 'Évoli', type: 'Normal,Combat', level: 22, img: 'evoli.png' },
     { name: 'Dracaufeu', type: 'Feu,Vol', level: 50, img: 'dracaufeu.png' },
     { name: 'Florizarre', type: 'Plante,Poison', level: 55, img: 'florizarre.png' },
-    { name: 'Tortank', type: 'Eau', level: 52, img: 'tortank.png' },
+    { name: 'Tortank', type: 'Eau,toto', level: 52, img: 'tortank.png' },
     { name: 'Mélofée', type: 'Fée', level: 18, img: 'melofee.png' },
     { name: 'Raichu', type: 'Électrique', level: 40, img: 'raichu.png' },
     { name: 'Magicarpe', type: 'Eau', level: 5, img: 'magicarpe.png' },
     { name: 'Lokhlass', type: 'Eau,Glace', level: 35, img: 'lokhlass.png' },
     { name: 'Onix', type: 'Roche,Sol', level: 30, img: 'onix.png' },
     { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
-    { }
+    { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
 
 /*
- * Fonction qui retourne le code HTML de la carte du pokémon passé en paramètre
- * @param { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
+ * Fonction qui retourne le code HTML de la carte du pokémon qui est passée en paramètre
+ * @param pokemon { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' } un objet Pokémon
  */
-function generatePokemonCardHTML(pokemon) {
-    return `<div class="pokemon-card" style="background: #705898;">
-                <img src="images/${pokemon.img}" alt="${pokemon.name}"/>
-                <h2>${pokemon.name}</h2>
-                <div>Type: ${pokmon.type.replace(',',' / ')}</div>
-                <div>Niveau: ${pokemon.level}</div>
-            </div>`;
-}
-    
 
-const containerDiv = document.querySelector('.pokemon-container');
+// Constantes : searchBar = barre de recherches HTML, divContainer = liste contenant Pokemons HTML
+const searchBar = document.getElementById('search-bar');
+const divContainer = document.querySelector('.pokemon-container');
 
-// Fonction pour AFFICHER le nom des Pokemons dans le div
-function displayPokemons() {
+// Déclaration de la fonction qui génère une carte pokemon
+function generatePokemonCardHTML(pokemon){
+    const imgPath = `images/${img}`
+    // Sort les types de la forme tableau d'objets pour les transformer en liste de chaînes de caractère (séparés par une virgule)
+    let tabType = pokemon.type.split(',');
+    let type1 = tabType[0]; // 1er type est en position 0
+    let type2 = tabType[1]; // 2ème type est en position 1
+    let bgColor = typeColors[type1]
 
-    containerDiv.innerHTML = ''; // EFFACE les données actuelles du div container-pokemon
-
-    // à faire dans la condition: SI longueur du tableau est égale à 0 (différent de autre)
-    if(!pokemonTab.length) { // if(pokemonTab.length === 0) --> === de valeur 0, de valeur numérique 0 et de type null
-        containerDiv.innerHTML += "<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>";
-        return; // sort de la fonction
+    // Si un deuxième type existe
+    if(type2) {
+        let t2 = typeColors[type2] || DEFAULT_COLOR;
+        bgColor = `linear-gradient(to right, ${typeColors[type1]} 50%, ${t2} 50%);`;
     }
 
-    
-    let resultatHTML = ''; // CREE resultatHTML, pour n'appeler qu'une fois innerHTML (gourmand en énergie)
-    for (let pokemon of pokemonTab) {
+    // Ce que contient la fonction comme attributs
+    return `<div class="pokemon-card"
+                 style="background: ${bgColor};">
+                <img src="${imgPath}" alt="${pokemon.name}">
+                <h2>${pokemon.name}</h2>
+                <div>Type: ${pokemon.type.replace(',', ' / ')}</div>
+                <div>Niveau: ${pokemon.level}</div>
+            </div>
+            `;
+}
+
+/*
+ * Fonction qui affiche le nom des pokémons dans la <div class="pokemon-container">
+ */
+function displayPokemons () {
+
+    // Vide le contenu du container
+    divContainer.innerHTML = '';
+    // Si tableau est vide, si la taille est de 0
+    if(!pokemonsTab.length) {
+        divContainer.innerHTML = "<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>";
+        return; // Sort de la fonction
+    }
+    let resultatHTML = '';
+    // Pour chaque pokémon du tableau pokemonsTab
+    for (let pokemon of pokemonsTab) {
         resultatHTML += generatePokemonCardHTML(pokemon);
     }
-    containerDiv.innerHTML = resultatHTML;
-    /*
-    for (let pokemon of pokemonTab) {
-        let pokemonType = pokemon.type.split(',');
-
-        if(pokemonType.length === 1){
-            resultatHTML += `<p>${pokemon.name} <small>${pokemonType[0]}</small></p>`;
-        } else if (pokemonType.length === 2){
-            resultatHTML += `<p>${pokemon.name} <small>${pokemonType[0]}</small> <small>${pokemonType[1]}</small></p>`
-        }
-    }
-    */
-
-
-
+    // Ajoute les cartes au container
+    divContainer.innerHTML = resultatHTML;
 }
-displayPokemons();
+
+/*
+ * Fonction qui filtre les Pokemons en fonction de la recherche de l'utilisateur (n'affiche que les résultats contenant les mêmes caractères que la recherche)
+ */
+
+function filtrerEtTrierPokemons() {
+    // crée une constante qui garde la valeur (en minuscules) entrée dans la barre de recerches
+    const recherche = searchBar.value.toLowerCase();
+    // crée une variable qui compare la recherche et, dans le tableau pokemonsTab, les noms de Pokemons (mis en minuscule) --> laisse passer seulement le (ou les) pokemon correspondant à la recherche
+    let pokemonsFiltres = pokemonsTab.filter(pokemon => pokemon.name.toLowerCase().includes(recherche));
+    displayPokemons(pokemonsFiltres);
+}
+/*
+ * Fonction qui écoute l'évènement "entrée de texte", et qui applique filtrer... si évènement survient
+ */
+searchBar.addEventListener('input', filtrerEtTrierPokemons);
+
+// Appelle la fonction displayPokemons()
+filtrerEtTrierPokemons();
