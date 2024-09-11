@@ -1,13 +1,14 @@
 /**
  * Exercice : Mini Pokédex
- * @author Steve Fallet <steve.fallet@dvitec.ch>
+ * @author Charmillot Coline <coline.charmillot@divtec.ch>
  * @since 2024-09-01
+ * @version 2024-09-11
  */
 
 'use strict';
 
 // Couleur par défaut pour les types de Pokémon non définis
-const DEFAULT_COLOR = 'red';
+const DEFAULT_COLOR = 'white';
 
 // Couleurs pour chaque type de Pokémon
 const typeColors = {
@@ -152,7 +153,7 @@ function filtrerEtTrierPokemons() {
 }
 
 /*
- * Fonctions qui écoute les évènement
+ * Fonctions qui écoute les évènements
  * Si "entrée de texte" dans "barre de recherche", applique filtrer... quand évènement survient
  * Si "changement de choix" dans "filtre de types", applique filtrer... quand évènement survient
  * Si "changement de choix" dans "liste d'ordre", applique filtrer... quand évènement survient
